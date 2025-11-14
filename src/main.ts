@@ -16,6 +16,7 @@ import { commands } from "@/commands.ts";
 import "@/pik.ts"; // trigger healthcheck
 import { routes, makeStatsTask } from "./pik.ts";
 import { error, PIK_LOGO, success } from "./embeds.ts";
+import db from "./db.ts";
 
 export class Pablo extends Client {
   pikChannelId: string;
@@ -55,6 +56,7 @@ export class Pablo extends Client {
       currentCommands.size !== commands.length ||
       (Deno.env.get("PABLO_UPDATE_COMMANDS") ?? "0") === "1"
     ) {
+      console.log("updating commands...");
       await this.interactions.commands.bulkEdit(commands);
     }
 
@@ -124,7 +126,7 @@ export class Pablo extends Client {
               type: MessageComponentType.BUTTON,
               style: "SUCCESS",
               label: "Confirm",
-              customID: `confirm-link:${res.name}`,
+              customID: `confirm-link:${res.uuid}:${res.name}`,
             },
             {
               type: MessageComponentType.BUTTON,
@@ -151,7 +153,7 @@ export class Pablo extends Client {
       return;
     }
 
-    const player = i.customID.split(":")[1];
+    const [,uuid,player] = i.customID.split(":");
     console.log(`attemting to add user ${player}`);
     const whitelistRes = await routes.whitelist.add(player);
     console.log(`server respondend`, whitelistRes);
@@ -170,6 +172,8 @@ export class Pablo extends Client {
       return;
     }
 
+    console.info(`Linking ${i.user.id} <-> ${uuid}`);
+    db.prepare("INSERT INTO linked_users (did, mcid) VALUES (?, ?)").run(i.user.id, uuid);
     await i.updateMessage({
       embeds: [success("You have been ~~promoted~~ whitelisted!")],
       components: [],

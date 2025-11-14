@@ -1,7 +1,8 @@
 .envrc
 .direnv
 .env*
-result/
+pablo.db
+result
 vendor/
 node_modules/
 
