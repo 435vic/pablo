@@ -3,7 +3,10 @@
   deno,
   runCommand,
   fetchzip,
-  autoPatchelfHook
+  makeWrapper,
+  lib,
+  glibc
+  # autoPatchelfHook
 }: let
   pname = "pablo";
   version = "v0.69.0";
@@ -53,7 +56,7 @@
 in stdenvNoCC.mkDerivation {
   inherit pname version;
 
-  nativeBuildInputs = [ autoPatchelfHook deno ];
+  nativeBuildInputs = [ makeWrapper deno ];
 
   unpackPhase = ''
     cp -r ${deno-source}/* .
@@ -78,6 +81,13 @@ in stdenvNoCC.mkDerivation {
     mkdir -p $out/bin
     cp "$pname" $out/bin
     runHook postInstall
+  '';
+
+  postInstall = ''
+    wrapProgram $out/bin/$pname \
+      --set LD_LIBRARY_PATH ${lib.makeLibraryPath[
+        glibc
+      ]}
   '';
 
   dontFixup = false;
