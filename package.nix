@@ -55,10 +55,10 @@
       cp $src/denort $out
     '';
   };
-in stdenvNoCC.mkDerivation {
+in stdenv.mkDerivation {
   inherit pname version;
 
-  nativeBuildInputs = [ makeWrapper deno ];
+  nativeBuildInputs = [ patchelf deno ];
 
   unpackPhase = ''
     cp -r ${deno-source}/* .
@@ -85,12 +85,9 @@ in stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
-  postInstall = ''
-    wrapProgram $out/bin/$pname \
-      --prefix LD_LIBRARY_PATH ${lib.makeLibraryPath[
-        stdenv.cc.cc.lib
-        glibc
-      ]}
+  fixupPhase = ''
+    patchelf \
+      --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
+      $out/bin/$pname
   '';
-
 }
