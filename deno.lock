@@ -1,0 +1,153 @@
+{
+  "version": "5",
+  "specifiers": {
+    "jsr:@denosaurs/event@2.0.2": "2.0.2",
+    "jsr:@harmony/harmony@^2.9.1": "2.9.1",
+    "jsr:@std/assert@0.217": "0.217.0",
+    "jsr:@std/assert@1": "1.0.15",
+    "jsr:@std/bytes@0.217": "0.217.0",
+    "jsr:@std/encoding@0.217": "0.217.0",
+    "jsr:@std/fs@0.217": "0.217.0",
+    "jsr:@std/internal@^1.0.12": "1.0.12",
+    "jsr:@std/io@0.217": "0.217.0",
+    "jsr:@std/path@0.217": "0.217.0",
+    "npm:@evan/wasm@0.0.95": "0.0.95",
+    "npm:@types/node@*": "24.2.0",
+    "npm:redis@4.6.13": "4.6.13_@redis+client@1.5.14",
+    "npm:ts-mixer@6.0.0": "6.0.0"
+  },
+  "jsr": {
+    "@denosaurs/event@2.0.2": {
+      "integrity": "3310ba1a9e94dd60ccb09c6084fc818cc1cd50e543c56ef0c6199f1b89073392"
+    },
+    "@harmony/harmony@2.9.1": {
+      "integrity": "ffa5283d3df25b492a6eeb33607fcd9f1a9c18b1ec1b0f7c8e396f9839c5f1ec",
+      "dependencies": [
+        "jsr:@denosaurs/event",
+        "jsr:@std/encoding",
+        "jsr:@std/fs",
+        "jsr:@std/io",
+        "npm:@evan/wasm",
+        "npm:redis",
+        "npm:ts-mixer"
+      ]
+    },
+    "@std/assert@0.217.0": {
+      "integrity": "c98e279362ca6982d5285c3b89517b757c1e3477ee9f14eb2fdf80a45aaa9642"
+    },
+    "@std/assert@1.0.15": {
+      "integrity": "d64018e951dbdfab9777335ecdb000c0b4e3df036984083be219ce5941e4703b",
+      "dependencies": [
+        "jsr:@std/internal"
+      ]
+    },
+    "@std/bytes@0.217.0": {
+      "integrity": "58209975707478fe12423d0b3270f4d400fd135a4edb1f50eeca8f92e34e6580"
+    },
+    "@std/encoding@0.217.0": {
+      "integrity": "b03e8ff94c98d6b6a02c02c5cf8e5d203400155516248964fc4559abc04669dc"
+    },
+    "@std/fs@0.217.0": {
+      "integrity": "0bfff5f3618d68c385b28b4ffbf3a15c98293a0f1186444458b62e0111ce77b2",
+      "dependencies": [
+        "jsr:@std/path"
+      ]
+    },
+    "@std/internal@1.0.12": {
+      "integrity": "972a634fd5bc34b242024402972cd5143eac68d8dffaca5eaa4dba30ce17b027"
+    },
+    "@std/io@0.217.0": {
+      "integrity": "08d3dd7c10956d1433be95306ec15179cdebe49a0ce5a74238fabf140bb74382",
+      "dependencies": [
+        "jsr:@std/bytes"
+      ]
+    },
+    "@std/path@0.217.0": {
+      "integrity": "1217cc25534bca9a2f672d7fe7c6f356e4027df400c0e85c0ef3e4343bc67d11",
+      "dependencies": [
+        "jsr:@std/assert@0.217"
+      ]
+    }
+  },
+  "npm": {
+    "@evan/wasm@0.0.95": {
+      "integrity": "sha512-fWW2p6iNhEVhsMStf3gj4UD+IQz2TZFunqRPjSeKYlVUHyoLoStNrW3XaiiEj4b7u/0mUPcvT4oYAauerDWF/Q=="
+    },
+    "@redis/bloom@1.2.0_@redis+client@1.5.14": {
+      "integrity": "sha512-HG2DFjYKbpNmVXsa0keLHp/3leGJz1mjh09f2RLGGLQZzSHpkmZWuwJbAvo3QcRY8p80m5+ZdXZdYOSBLlp7Cg==",
+      "dependencies": [
+        "@redis/client"
+      ]
+    },
+    "@redis/client@1.5.14": {
+      "integrity": "sha512-YGn0GqsRBFUQxklhY7v562VMOP0DcmlrHHs3IV1mFE3cbxe31IITUkqhBcIhVSI/2JqtWAJXg5mjV4aU+zD0HA==",
+      "dependencies": [
+        "cluster-key-slot",
+        "generic-pool",
+        "yallist"
+      ]
+    },
+    "@redis/graph@1.1.1_@redis+client@1.5.14": {
+      "integrity": "sha512-FEMTcTHZozZciLRl6GiiIB4zGm5z5F3F6a6FZCyrfxdKOhFlGkiAqlexWMBzCi4DcRoyiOsuLfW+cjlGWyExOw==",
+      "dependencies": [
+        "@redis/client"
+      ]
+    },
+    "@redis/json@1.0.6_@redis+client@1.5.14": {
+      "integrity": "sha512-rcZO3bfQbm2zPRpqo82XbW8zg4G/w4W3tI7X8Mqleq9goQjAGLL7q/1n1ZX4dXEAmORVZ4s1+uKLaUOg7LrUhw==",
+      "dependencies": [
+        "@redis/client"
+      ]
+    },
+    "@redis/search@1.1.6_@redis+client@1.5.14": {
+      "integrity": "sha512-mZXCxbTYKBQ3M2lZnEddwEAks0Kc7nauire8q20oA0oA/LoA+E/b5Y5KZn232ztPb1FkIGqo12vh3Lf+Vw5iTw==",
+      "dependencies": [
+        "@redis/client"
+      ]
+    },
+    "@redis/time-series@1.0.5_@redis+client@1.5.14": {
+      "integrity": "sha512-IFjIgTusQym2B5IZJG3XKr5llka7ey84fw/NOYqESP5WUfQs9zz1ww/9+qoz4ka/S6KcGBodzlCeZ5UImKbscg==",
+      "dependencies": [
+        "@redis/client"
+      ]
+    },
+    "@types/node@24.2.0": {
+      "integrity": "sha512-3xyG3pMCq3oYCNg7/ZP+E1ooTaGB4cG8JWRsqqOYQdbWNY4zbaV0Ennrd7stjiJEFZCaybcIgpTjJWHRfBSIDw==",
+      "dependencies": [
+        "undici-types"
+      ]
+    },
+    "cluster-key-slot@1.1.2": {
+      "integrity": "sha512-RMr0FhtfXemyinomL4hrWcYJxmX6deFdCxpJzhDttxgO1+bcCnkk+9drydLVDmAMG7NE6aN/fl4F7ucU/90gAA=="
+    },
+    "generic-pool@3.9.0": {
+      "integrity": "sha512-hymDOu5B53XvN4QT9dBmZxPX4CWhBPPLguTZ9MMFeFa/Kg0xWVfylOVNlJji/E7yTZWFd/q9GO5TxDLq156D7g=="
+    },
+    "redis@4.6.13_@redis+client@1.5.14": {
+      "integrity": "sha512-MHgkS4B+sPjCXpf+HfdetBwbRz6vCtsceTmw1pHNYJAsYxrfpOP6dz+piJWGos8wqG7qb3vj/Rrc5qOlmInUuA==",
+      "dependencies": [
+        "@redis/bloom",
+        "@redis/client",
+        "@redis/graph",
+        "@redis/json",
+        "@redis/search",
+        "@redis/time-series"
+      ]
+    },
+    "ts-mixer@6.0.0": {
+      "integrity": "sha512-nXIb1fvdY5CBSrDIblLn73NW0qRDk5yJ0Sk1qPBF560OdJfQp9jhl+0tzcY09OZ9U+6GpeoI9RjwoIKFIoB9MQ=="
+    },
+    "undici-types@7.10.0": {
+      "integrity": "sha512-t5Fy/nfn+14LuOc2KNYg75vZqClpAiqscVvMygNnlsHBFpSXdJaYtXMcdNLpl/Qvc3P2cB3s6lOV51nqsFq4ag=="
+    },
+    "yallist@4.0.0": {
+      "integrity": "sha512-3wdGidZyq5PB084XLES5TpOSRA3wjXAlIWMhum2kRcv/41Sn2emQ0dycQW4uZXLejwKvg6EsvbdlVL+FYEct7A=="
+    }
+  },
+  "workspace": {
+    "dependencies": [
+      "jsr:@harmony/harmony@^2.9.1",
+      "jsr:@std/assert@1"
+    ]
+  }
+}
