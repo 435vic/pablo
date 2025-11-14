@@ -4,6 +4,7 @@
   runCommand,
   fetchzip,
   autoPatchelfHook,
+  libgcc,
   stdenv
 }: let
   pname = "pablo";
@@ -43,7 +44,7 @@
   denort = stdenv.mkDerivation {
     name = "denort";
 
-    nativeBuildInputs = [ autoPatchelfHook ];
+    nativeBuildInputs = [ autoPatchelfHook libgcc ];
 
     src = fetchzip {
       url = "https://dl.deno.land/release/v2.5.6/denort-x86_64-unknown-linux-gnu.zip";
