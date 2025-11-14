@@ -152,7 +152,9 @@ export class Pablo extends Client {
     }
 
     const uuid = i.customID.split(":")[1];
+    console.log(`attemting to add user ${uuid}`);
     const whitelistRes = await routes.whitelist.add(uuid);
+    console.log(`server respondend`, whitelistRes);
     if (!whitelistRes.ok) {
       console.error(
         `could not whitelist, ${whitelistRes.status} ${whitelistRes.statusText}`,
