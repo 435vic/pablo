@@ -4,8 +4,8 @@
   runCommand,
   fetchzip,
   makeWrapper,
-  patchelf,
   stdenv,
+  patchelf,
   lib,
   glibc
   # autoPatchelfHook
@@ -58,7 +58,7 @@
 in stdenvNoCC.mkDerivation {
   inherit pname version;
 
-  nativeBuildInputs = [ patchelf deno ];
+  nativeBuildInputs = [ makeWrapper deno ];
 
   unpackPhase = ''
     cp -r ${deno-source}/* .
@@ -85,13 +85,12 @@ in stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
-  preFixup = ''
-    patchelf \
-      --set-interpreter ${stdenv.cc.bintools.dynamicLinker} \
-      --set-rpath ${lib.makeLibraryPath [ stdenv.cc.cc.lib ]} \
-      $out/bin/$pname
+  postInstall = ''
+    wrapProgram $out/bin/$pname \
+      --prefix LD_LIBRARY_PATH ${lib.makeLibraryPath[
+        stdenv.cc.cc.lib
+        glibc
+      ]}
   '';
 
-  dontStrip = true;
-  dontPatchELF = true;
 }

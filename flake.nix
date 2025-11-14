@@ -27,7 +27,8 @@
 
              set -l target_url "https://files.boredvico.dev/mc/pablo"
              set -l commit (git rev-parse HEAD)
-             set -l tmp_file (mktemp -d)/pablo.main.(string sub -e7 $commit).tar.gz
+             set -l branch (git branch --show)
+             set -l tmp_file (mktemp -d)/pablo.$branch.(string sub -e7 $commit).tar.gz
 
              echo "Creating archive at temporary location: $tmp_file"
 
