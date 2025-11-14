@@ -124,7 +124,7 @@ export class Pablo extends Client {
               type: MessageComponentType.BUTTON,
               style: "SUCCESS",
               label: "Confirm",
-              customID: `confirm-link:${res.uuid}`,
+              customID: `confirm-link:${res.name}`,
             },
             {
               type: MessageComponentType.BUTTON,
@@ -151,9 +151,9 @@ export class Pablo extends Client {
       return;
     }
 
-    const uuid = i.customID.split(":")[1];
-    console.log(`attemting to add user ${uuid}`);
-    const whitelistRes = await routes.whitelist.add(uuid);
+    const player = i.customID.split(":")[1];
+    console.log(`attemting to add user ${player}`);
+    const whitelistRes = await routes.whitelist.add(player);
     console.log(`server respondend`, whitelistRes);
     if (!whitelistRes.ok) {
       console.error(
