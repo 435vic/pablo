@@ -3,12 +3,8 @@
   deno,
   runCommand,
   fetchzip,
-  makeWrapper,
-  stdenv,
-  patchelf,
-  lib,
-  glibc
-  # autoPatchelfHook
+  autoPatchelfHook,
+  stdenv
 }: let
   pname = "pablo";
   version = "v0.69.0";
@@ -44,8 +40,11 @@
     dontFixup = true;
   };
 
-  denort = stdenvNoCC.mkDerivation {
+  denort = stdenv.mkDerivation {
     name = "denort";
+
+    nativeBuildInputs = [ autoPatchelfHook ];
+
     src = fetchzip {
       url = "https://dl.deno.land/release/v2.5.6/denort-x86_64-unknown-linux-gnu.zip";
       hash = "sha256-5XHyA3iSfiA6gYBFfW4ITflKl6U8cEFRaJdxDkkcrP8=";
@@ -54,11 +53,13 @@
     installPhase = ''
       cp $src/denort $out
     '';
+
+    dontFixup = false;
   };
-in stdenv.mkDerivation {
+in stdenvNoCC.mkDerivation {
   inherit pname version;
 
-  nativeBuildInputs = [ patchelf deno ];
+  nativeBuildInputs = [ deno ];
 
   unpackPhase = ''
     cp -r ${deno-source}/* .
@@ -85,9 +86,11 @@ in stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  fixupPhase = ''
-    patchelf \
-      --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
-      $out/bin/$pname
-  '';
+  dontFixup = true;
+
+  # fixupPhase = ''
+  #   patchelf \
+  #     --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
+  #     $out/bin/$pname
+  # '';
 }
