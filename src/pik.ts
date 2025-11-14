@@ -1,6 +1,7 @@
 
 const keyPath = Deno.env.get('PIK_CLIENT_TLS_KEY');
 const certPath = Deno.env.get('PIK_CLIENT_TLS_CERT');
+const caPath = Deno.env.get('PIK_CLIENT_TLS_CA_CERT');
 const socketPath = Deno.env.get('PIK_CLIENT_UDS_PATH');
 const apiHost = Deno.env.get('PIK_CLIENT_HOST') ?? 'api.mc.boredvico.dev';
 
@@ -12,14 +13,16 @@ async function getPikClient(): Promise<Deno.HttpClient> {
     });
   }
 
-  if (keyPath && certPath) {
+  if (keyPath && certPath && caPath) {
     try {
       const key = await Deno.readTextFile(keyPath);
       const cert = await Deno.readTextFile(certPath);
+      const caCert = await Deno.readTextFile(caPath);
 
       return Deno.createHttpClient({
         key,
-        cert
+        cert,
+        caCerts: [ caCert ]
       });
     } catch (e) {
       console.error('Error while reading TLS PEM files: ', e);
@@ -27,7 +30,7 @@ async function getPikClient(): Promise<Deno.HttpClient> {
     }
   }
 
-  throw new Error("Either PIK_CLIENT_UDS_PATH or PIK_CLIENT_TLS_{KEY,CERT} must be set.");
+  throw new Error("Either PIK_CLIENT_UDS_PATH or PIK_CLIENT_TLS_{KEY,CERT,CA_CERT} must be set.");
 }
 
 export const pikClient = await getPikClient();
