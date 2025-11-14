@@ -1,13 +1,14 @@
 {
   stdenvNoCC,
   deno,
-  runCommandNoCC,
-  fetchzip
+  runCommand,
+  fetchzip,
+  autoPatchelfHook
 }: let
   pname = "pablo";
   version = "v0.69.0";
 
-  deno-source = runCommandNoCC "${pname}-source" { src = ./.; } ''
+  deno-source = runCommand "${pname}-source" { src = ./.; } ''
     mkdir -p $out
     cp -r $src/src $out
     cp $src/deno.json $out
@@ -52,7 +53,7 @@
 in stdenvNoCC.mkDerivation {
   inherit pname version;
 
-  nativeBuildInputs = [ deno ];
+  nativeBuildInputs = [ autoPatchelfHook deno ];
 
   unpackPhase = ''
     cp -r ${deno-source}/* .
@@ -78,4 +79,6 @@ in stdenvNoCC.mkDerivation {
     cp "$pname" $out/bin
     runHook postInstall
   '';
+
+  dontFixup = false;
 }

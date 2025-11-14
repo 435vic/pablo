@@ -23,10 +23,10 @@
              exit 1
              end
 
-             echo "Found 'u2c' executable. Proceeding..."
+             read -sp 'echo -n "input password "; set_color red; echo -n "~> "' pass
 
-             set -l target_url "https://files.boredvico.dev/mc/pablo.tar.gz"
-             set -l tmp_file (mktemp -t pablo_archive.XXXXXX.tar.gz)
+             set -l target_url "https://files.boredvico.dev/mc"
+             set -l tmp_file (mktemp -d)/pablo.tar.gz
 
              echo "Creating archive at temporary location: $tmp_file"
 
@@ -41,7 +41,7 @@
              echo "Archive created successfully."
 
              echo "Uploading to $target_url..."
-             u2c $tmp_file $target_url
+             u2c -ua "$pass" $target_url $tmp_file
 
              if test $status -eq 0
                echo "Upload successful!"
