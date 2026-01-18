@@ -24,7 +24,7 @@
     nativeBuildInputs = [ deno ];
     outputHashMode = "recursive";
     outputHashAlgo = "sha256";
-    outputHash = "sha256-lropznvRqMWJ6rorXZwndZRzqvgSNQ45kq0iRwEXr18=";
+    outputHash = "sha256-EaQvGDl3HHeg9KUf6FoT86H9PlK2kgVz7Jl2/yPwiHw=";
 
     DENO_DIR=".deno";
 
