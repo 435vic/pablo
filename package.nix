@@ -49,7 +49,7 @@
 
     src = fetchzip {
       url = "https://dl.deno.land/release/v2.6.4/denort-x86_64-unknown-linux-gnu.zip";
-      hash = "sha256-EaQvGDl3HHeg9KUf6FoT86H9PlK2kgVz7Jl2/yPwiHw=";
+      hash = "sha256-C15pGIrRNYx/YYzpJD8ZdqrNCTZNKpneF0RPXs8q5tE=";
     };
 
     installPhase = ''
