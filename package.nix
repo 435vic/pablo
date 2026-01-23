@@ -5,6 +5,7 @@
   fetchzip,
   autoPatchelfHook,
   libgcc,
+  denoDepsHash ? "",
   stdenv
 }: let
   pname = "pablo";
@@ -24,7 +25,7 @@
     nativeBuildInputs = [ deno ];
     outputHashMode = "recursive";
     outputHashAlgo = "sha256";
-    outputHash = "sha256-EaQvGDl3HHeg9KUf6FoT86H9PlK2kgVz7Jl2/yPwiHw=";
+    outputHash = if denoDepsHash == "" then "sha256-BaBnOl7oPvJfbVo1YgGB8EYGzWJ/wfCgO180EOuuFSg=" else denoDepsHash;
 
     DENO_DIR=".deno";
 
@@ -47,8 +48,8 @@
     nativeBuildInputs = [ autoPatchelfHook libgcc ];
 
     src = fetchzip {
-      url = "https://dl.deno.land/release/v2.5.6/denort-x86_64-unknown-linux-gnu.zip";
-      hash = "sha256-5XHyA3iSfiA6gYBFfW4ITflKl6U8cEFRaJdxDkkcrP8=";
+      url = "https://dl.deno.land/release/v2.6.4/denort-x86_64-unknown-linux-gnu.zip";
+      hash = "sha256-EaQvGDl3HHeg9KUf6FoT86H9PlK2kgVz7Jl2/yPwiHw=";
     };
 
     installPhase = ''
