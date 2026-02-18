@@ -7,6 +7,7 @@ import {
   GatewayIntents,
   Guild,
   GuildChannel,
+  GuildTextChannel,
   Interaction,
   Message,
   MessageComponentType,
@@ -21,7 +22,10 @@ import db from "./db.ts";
 export class Pablo extends Client {
   pikChannelId: string;
   pikStatusChannelId: string;
+  // Channel that shows server status (non-joinable voice channel)
   pikStatusChannel?: GuildChannel;
+  // Channel for minecraft chat, messages sent here are sent to MC
+  pikChannel?: GuildTextChannel;
   guildId: string;
   guild?: Guild;
   
@@ -48,7 +52,19 @@ export class Pablo extends Client {
 
     this.pikStatusChannel = await this.guild.channels.get(this.pikStatusChannelId);
     if (!this.pikStatusChannel) {
-      console.warn(`Could not obtain channel ${this.pikStatusChannelId}`);
+      console.warn(`Could not obtain status channel ${this.pikStatusChannelId}`);
+    }
+
+    this.pikChannel = await this.guild.channels.get(this.pikChannelId)
+      .then(c => {
+        if (!c?.isGuildText()) {
+          throw Error(`PIK main channel ID doesn't exist or\
+points to a non-text channel. Please provide an ID for a text channel.`)
+        }
+        return c
+      });
+    if (!this.pikChannel) {
+      console.warn(`Could not obtain main channel ${this.pikChannelId}`);
     }
 
     const currentCommands = await this.guild!.commands.all();
@@ -68,8 +84,9 @@ export class Pablo extends Client {
       
       try {
         await this.pikStatusChannel?.setName(message);
+        await this.pikChannel?.setTopic(`Chat with people on the server! Online: ${this.printPlayers(stats.players)}`); 
       } catch (e) {
-        console.error(`Unable to edit status channel: `, e);
+        console.error(`Unable to update discord channel`, e);
       }
     }), 60_000);
   }
@@ -198,6 +215,10 @@ export class Pablo extends Client {
       content: msg.content,
     });
     return res;
+  }
+
+  printPlayers(players: string[]) {
+    return players.join(", ");
   }
 }
 

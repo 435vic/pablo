@@ -65,10 +65,11 @@ export const routes = {
   },
 };
 
-export function makeStatsTask(callback: (data: { online: boolean, playerCount: number }) => void) {
+export function makeStatsTask(callback: (data: { online: boolean, playerCount: number, players: string[] }) => void) {
   let stats = {
     online: false,
     playerCount: 0,
+    players: []
   }
 
   const task = async () => {
