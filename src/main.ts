@@ -84,7 +84,7 @@ points to a non-text channel. Please provide an ID for a text channel.`)
       
       try {
         await this.pikStatusChannel?.setName(message);
-        await this.pikChannel?.setTopic(`Chat with people on the server! Online: ${this.printPlayers(stats.players)}`); 
+        await this.pikChannel?.setTopic(`Chat with people on the server!\n${this.printPlayers(stats.players)}`); 
       } catch (e) {
         console.error(`Unable to update discord channel`, e);
       }
@@ -218,7 +218,11 @@ points to a non-text channel. Please provide an ID for a text channel.`)
   }
 
   printPlayers(players: string[]) {
-    return players.join(", ");
+    if (!players.length) {
+      return "Currently there are no players online.";
+    }
+
+    return `Online: ${players.join(", ")}`;
   }
 }
 
