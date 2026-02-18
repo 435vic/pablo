@@ -5,6 +5,12 @@ const caPath = Deno.env.get('PIK_CLIENT_TLS_CA_CERT');
 const socketPath = Deno.env.get('PIK_CLIENT_UDS_PATH');
 const apiHost = Deno.env.get('PIK_CLIENT_HOST') ?? 'api.mc.boredvico.dev';
 
+export interface ServerStats { 
+  online: boolean,
+  playerCount: number,
+  players: string[]
+};
+
 async function getPikClient(): Promise<Deno.HttpClient> {
   if (socketPath) {
     console.log(`[pik] using unix domain socket at ${socketPath} for communication`);
@@ -65,7 +71,7 @@ export const routes = {
   },
 };
 
-export function makeStatsTask(callback: (data: { online: boolean, playerCount: number, players: string[] }) => void) {
+export function makeStatsTask(callback: (data: ServerStats) => void) {
   let stats = {
     online: false,
     playerCount: 0,

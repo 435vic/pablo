@@ -15,7 +15,7 @@ import {
 } from "@harmony/harmony";
 import { commands } from "@/commands.ts";
 import "@/pik.ts"; // trigger healthcheck
-import { routes, makeStatsTask } from "./pik.ts";
+import { routes, makeStatsTask, ServerStats } from "./pik.ts";
 import { error, PIK_LOGO, success } from "./embeds.ts";
 import db from "./db.ts";
 
@@ -30,6 +30,7 @@ export class Pablo extends Client {
   guild?: Guild;
   
   mcStatsInterval: number;
+  mcStatsPrevious: ServerStats;
 
   constructor(gid: string, pikcid: string, pikStatusCid: string) {
     super();
@@ -37,6 +38,7 @@ export class Pablo extends Client {
     this.pikChannelId = pikcid;
     this.pikStatusChannelId = pikStatusCid;
     this.mcStatsInterval = 0;
+    this.mcStatsPrevious = { online: false, playerCount: 0, players: [] };
   }
 
   @event()
@@ -78,17 +80,21 @@ points to a non-text channel. Please provide an ID for a text channel.`)
 
     this.mcStatsInterval = setInterval(makeStatsTask(async stats => {
       console.log("[pik] fetched stats from mc:", stats);
+      if (!this.shouldUpdate(stats)) return;
+
       const message = stats.online
         ? `🟢 Players: ${stats.playerCount}`
         : "🔴 Offline";
       
       try {
         await this.pikStatusChannel?.setName(message);
-        await this.pikChannel?.setTopic(`Chat with people on the server!\n${this.printPlayers(stats.players)}`); 
+        await this.pikChannel?.setTopic(`Chat with people on the server!\n${this.printPlayers(stats.players)}`);
       } catch (e) {
         console.error(`Unable to update discord channel`, e);
+      } finally {
+        this.mcStatsPrevious = stats;
       }
-    }), 60_000);
+    }), 20_000);
   }
 
   @slash()
@@ -215,6 +221,13 @@ points to a non-text channel. Please provide an ID for a text channel.`)
       content: msg.content,
     });
     return res;
+  }
+
+  shouldUpdate(stats: ServerStats): boolean {
+    if (stats.online !== this.mcStatsPrevious.online) return true;
+    if (stats.players.length !== this.mcStatsPrevious.players.length) return true;
+    const prev = new Set(this.mcStatsPrevious.players);
+    return stats.players.some(p => !prev.has(p));
   }
 
   printPlayers(players: string[]) {
