@@ -282,8 +282,6 @@ if (import.meta.main) {
     "PIK_STATUS_CHANNEL_ID",
   ); 
 
-  console.log('Obtained env vars:', env);
-
   const client = new Pablo(env.guildId, env.channelId, env.statusChannelId);
 
   client.connect(env.botToken, [

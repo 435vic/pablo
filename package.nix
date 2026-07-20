@@ -2,11 +2,8 @@
   stdenvNoCC,
   deno,
   runCommand,
-  fetchzip,
-  autoPatchelfHook,
-  libgcc,
+  makeWrapper,
   denoDepsHash ? "",
-  stdenv
 }: let
   pname = "pablo";
   version = "v0.69.0";
@@ -25,7 +22,7 @@
     nativeBuildInputs = [ deno ];
     outputHashMode = "recursive";
     outputHashAlgo = "sha256";
-    outputHash = if denoDepsHash == "" then "sha256-OpNXfwzFC7TjRg9l7v/FReh6dCW5ncTUz7qIi0icVJM=" else denoDepsHash;
+    outputHash = if denoDepsHash == "" then "sha256-gu0RSUpQPmwAsBiUID6zzcrLOl+qbTB7cUpVBRz9qTk=" else denoDepsHash;
 
     DENO_DIR=".deno";
 
@@ -41,58 +38,24 @@
 
     dontFixup = true;
   };
-
-  denort = stdenv.mkDerivation {
-    name = "denort";
-
-    nativeBuildInputs = [ autoPatchelfHook libgcc ];
-
-    src = fetchzip {
-      url = "https://dl.deno.land/release/v2.6.4/denort-x86_64-unknown-linux-gnu.zip";
-      hash = "sha256-C15pGIrRNYx/YYzpJD8ZdqrNCTZNKpneF0RPXs8q5tE=";
-    };
-
-    installPhase = ''
-      cp $src/denort $out
-    '';
-
-    dontFixup = false;
-  };
 in stdenvNoCC.mkDerivation {
   inherit pname version;
 
-  nativeBuildInputs = [ deno ];
-
-  unpackPhase = ''
-    cp -r ${deno-source}/* .
-    cp -r ${deps}/* .
-  '';
-
-  DENORT_BIN = denort;
-
-  buildPhase = ''
-    runHook preBuild
-    deno compile \
-      --output "$pname" \
-      --cached-only \
-      --no-check \
-      --allow-all \
-      "./src/main.ts"
-    runHook postBuild
-  '';
+  nativeBuildInputs = [ makeWrapper ];
+  dontUnpack = true;
+  dontBuild = true;
 
   installPhase = ''
     runHook preInstall
-    mkdir -p $out/bin
-    cp "$pname" $out/bin
+    mkdir -p $out/bin $out/lib/$pname
+    cp -r ${deno-source}/* ${deps}/* $out/lib/$pname/
+    makeWrapper ${deno}/bin/deno $out/bin/$pname \
+      --add-flags "run" \
+      --add-flags "--config=$out/lib/$pname/deno.json" \
+      --add-flags "--cached-only" \
+      --add-flags "--no-check" \
+      --add-flags "--allow-all" \
+      --add-flags "$out/lib/$pname/src/main.ts"
     runHook postInstall
   '';
-
-  dontFixup = true;
-
-  # fixupPhase = ''
-  #   patchelf \
-  #     --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
-  #     $out/bin/$pname
-  # '';
 }
